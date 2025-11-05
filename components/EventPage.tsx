@@ -33,7 +33,7 @@ const EventPage = ({ GithubEventDetails }: EventPageProps) => {
 
       <div className="flex flex-wrap gap-10 justify-center p-10">
         {GithubEventDetails.map((event, index) => (
-          <Link href={`/events/${event.slug}`} key={event.slug} className="w-[410px]">
+          <Link href={`/event/${event.slug}`} key={event.slug} className="w-[410px]">
             <Image
               src={images[index]} // ✅ loops through images safely
               alt={event.title}

@@ -40,12 +40,83 @@ export async function POST(req: NextRequest) {
       uploadStream.end(buffer);
     });
 
-    // ✅ Create event with Cloudinary URL
-    const eventData = Object.fromEntries(formData.entries());
-    const createdEvent = await Event.create({
-      ...eventData,
+    // ✅ Helper to get trimmed string values
+    const getString = (key: string): string => {
+      const value = formData.get(key);
+      return typeof value === 'string' ? value.trim() : '';
+    };
+
+    // ✅ Helper to parse array fields (handles multiple values or comma-separated string)
+    const parseArray = (key: string): string[] => {
+      const values = formData.getAll(key);
+      if (values.length > 1) {
+        return values
+          .map((v) => (typeof v === 'string' ? v.trim() : ''))
+          .filter(Boolean);
+      } else if (values.length === 1) {
+        const val = values[0];
+        if (typeof val === 'string') {
+          return val.split(',').map((s) => s.trim()).filter(Boolean);
+        }
+      }
+      return [];
+    };
+
+    // ✅ Extract and validate required fields
+    const title = getString('title');
+    const description = getString('description');
+    const overview = getString('overview');
+    const venue = getString('venue');
+    const location = getString('location');
+    const date = formData.get('date') as string || ''; // No trim for date
+    const time = formData.get('time') as string || ''; // No trim for time
+    const mode = getString('mode');
+    const audience = getString('audience');
+    const organizer = getString('organizer');
+    const agenda = parseArray('agenda');
+    const tags = parseArray('tags');
+
+    // ✅ Upfront check for missing required fields
+    const missingFields: string[] = [];
+    if (!title) missingFields.push('title');
+    if (!description) missingFields.push('description');
+    if (!overview) missingFields.push('overview');
+    if (!venue) missingFields.push('venue');
+    if (!location) missingFields.push('location');
+    if (!date) missingFields.push('date');
+    if (!time) missingFields.push('time');
+    if (!mode) missingFields.push('mode');
+    if (!audience) missingFields.push('audience');
+    if (!organizer) missingFields.push('organizer');
+    if (agenda.length === 0) missingFields.push('agenda');
+    if (tags.length === 0) missingFields.push('tags');
+
+    if (missingFields.length > 0) {
+      return NextResponse.json(
+        { message: `Missing required fields: ${missingFields.join(', ')}` },
+        { status: 400 }
+      );
+    }
+
+    // ✅ Create event data object (slug generated in pre-save hook)
+    const eventData = {
+      title,
+      description,
+      overview,
+      venue,
+      location,
+      date,
+      time,
+      mode,
+      audience,
+      agenda,
+      organizer,
+      tags,
       image: uploadResult.secure_url,
-    });
+    };
+
+    // ✅ Create event (Mongoose validation and pre-save hooks will run)
+    const createdEvent = await Event.create(eventData);
 
     return NextResponse.json(
       { message: "Event created successfully", event: createdEvent },
@@ -61,4 +132,20 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+export async function GET() {
+  try {
+
+     await connectDB();
+
+    const Events= await Event.find().sort({createdAt:-1});// db find events and sort from new to old
+  
+    return NextResponse.json({message:"Events found successfully",Events}) 
+  } 
+  catch (error) {
+      console.error(error);
+      return NextResponse.json({message:"sww", error})
+  }
+   
 }
