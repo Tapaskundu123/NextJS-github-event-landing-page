@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { Toaster } from "sonner";
 import { Schibsted_Grotesk, Martian_Mono } from "next/font/google";
 import "./globals.css";
 import LightRays from "../components/LightRays";
 import Navbar from "@/components/Navbar";
+
 
 const SchibstedGrotesk = Schibsted_Grotesk({ variable: "--font-schibsted-grotesk", subsets: ["latin"] });
 const MartianMono = Martian_Mono({ variable: "--font-martian-mono", subsets: ["latin"] });
@@ -22,7 +24,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <LightRays raysOrigin="top-center-offset" raysColor="#5dfeca" raysSpeed={0.5} />
           </div>
         </div>
-        <main>{children}</main>
+        <main>
+          {children}
+           <Toaster position="top-right" richColors />
+        </main>
+        
       </body>
     </html>
   );

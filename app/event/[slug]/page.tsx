@@ -1,4 +1,5 @@
 // app/events/[slug]/page.tsx
+import BookingForm from "@/components/BookingForm";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -27,6 +28,7 @@ export default async function EventBySlug({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+
 
   // Optional: Validate slug format
   if (!slug || slug.includes("..") || slug.includes("/")) {
@@ -60,10 +62,13 @@ export default async function EventBySlug({
     notFound();
   }
 
+
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-4">{event.title}</h1>
-      <div className="grid md:grid-cols-2 gap-8">
+     
+     <div className="flex justify-between">
+       <div className="">
         <div>
           <Image
             src={event.image}
@@ -126,6 +131,10 @@ export default async function EventBySlug({
           </div>
         </div>
       </div>
+
+       <BookingForm slug={slug} />
+     </div>
+
     </div>
   );
 }
