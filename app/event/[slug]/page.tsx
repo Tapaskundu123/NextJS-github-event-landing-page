@@ -29,7 +29,6 @@ export default async function EventBySlug({
 }) {
   const { slug } = await params;
 
-
   // Optional: Validate slug format
   if (!slug || slug.includes("..") || slug.includes("/")) {
     notFound();
@@ -62,79 +61,81 @@ export default async function EventBySlug({
     notFound();
   }
 
-
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-4">{event.title}</h1>
+    <div className="min-h-screen bg-gray-950 text-gray-100">
+      <div className="container mx-auto p-6">
+        <h1 className="text-3xl font-bold mb-6 text-white">{event.title}</h1>
      
-     <div className="flex justify-between">
-       <div className="">
-        <div>
-          <Image
-            src={event.image}
-            alt={event.title}
-             width={410}
-              height={300}
-            className="w-full h-64 object-cover rounded-xl"
-          />
-        </div>
-        <div>
-          <p className="text-gray-600 mb-4">{event.overview}</p>
-          <div className="space-y-2">
-            <p>
-              <strong>Location:</strong> {event.venue}, {event.location}
-            </p>
-            <p>
-              <strong>Date:</strong> {event.date}
-            </p>
-            <p>
-              <strong>Time:</strong> {event.time}
-            </p>
-            <p>
-              <strong>Mode:</strong> {event.mode}
-            </p>
-            <p>
-              <strong>Audience:</strong> {event.audience}
-            </p>
-            <p>
-              <strong>Organizer:</strong> {event.organizer}
-            </p>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="md:col-span-2 space-y-6">
+            <div>
+              <Image
+                src={event.image}
+                alt={event.title}
+                width={410}
+                height={300}
+                className="w-full h-64 object-cover rounded-xl"
+              />
+            </div>
+            <div>
+              <p className="text-gray-300 mb-6">{event.overview}</p>
+              <div className="space-y-2 text-gray-200">
+                <p>
+                  <strong className="text-emerald-400">Location:</strong> {event.venue}, {event.location}
+                </p>
+                <p>
+                  <strong className="text-emerald-400">Date:</strong> {event.date}
+                </p>
+                <p>
+                  <strong className="text-emerald-400">Time:</strong> {event.time}
+                </p>
+                <p>
+                  <strong className="text-emerald-400">Mode:</strong> {event.mode}
+                </p>
+                <p>
+                  <strong className="text-emerald-400">Audience:</strong> {event.audience}
+                </p>
+                <p>
+                  <strong className="text-emerald-400">Organizer:</strong> {event.organizer}
+                </p>
+              </div>
 
-          <div className="mt-6">
-            <h3 className="font-semibold mb-2">Agenda</h3>
-            <ul className="list-disc list-inside space-y-1">
-              {event.agenda.map((item, i) => (
-                <li key={i}>{item}</li>
-              ))}
-            </ul>
-          </div>
+              <div>
+                <h3 className="font-semibold mb-2 text-white">Agenda</h3>
+                <ul className="list-disc list-inside space-y-1 text-gray-300">
+                  {event.agenda.map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
+                </ul>
+              </div>
 
-          <div className="mt-6">
-            <h3 className="font-semibold mb-2">Tags</h3>
-            <div className="flex flex-wrap gap-2">
-              {event.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded"
-                >
-                  {tag}
-                </span>
-              ))}
+              <div>
+                <h3 className="font-semibold mb-2 text-white">Tags</h3>
+                <div className="flex flex-wrap gap-2">
+                  {event.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="bg-emerald-900 text-emerald-200 text-xs font-medium px-2.5 py-0.5 rounded"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <p className="text-sm text-gray-400">
+                  Full Description: {event.description}
+                </p>
+              </div>
             </div>
           </div>
 
-          <div className="mt-8">
-            <p className="text-sm text-gray-500">
-              Full Description: {event.description}
-            </p>
+          <div className="md:col-span-1">
+            <BookingForm slug={slug} />
           </div>
         </div>
       </div>
-
-       <BookingForm slug={slug} />
-     </div>
-
     </div>
   );
 }

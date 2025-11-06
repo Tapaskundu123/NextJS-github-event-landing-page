@@ -40,16 +40,16 @@ const BookingForm = ({ slug }: Props) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4 p-6 border rounded-lg w-80 bg-white shadow-sm"
+      className="space-y-4 p-6 border border-gray-700 rounded-lg bg-gray-800 shadow-lg"
     >
-      <h2 className="text-xl font-semibold">Book your Slot</h2>
+      <h2 className="text-xl font-semibold text-white">Book your Slot</h2>
 
       <input
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="you@example.com"
-        className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-gray-700 text-white placeholder-gray-400"
         required
         disabled={loading}
       />
@@ -57,7 +57,7 @@ const BookingForm = ({ slug }: Props) => {
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-2 text-white bg-emerald-600 rounded-md hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loading ? "Booking…" : "Submit"}
       </button>
